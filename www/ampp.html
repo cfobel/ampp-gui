@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Associated move-pair pattern demo</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="lib/bootstrap-3.1.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/jquery-ui.css">
+
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="lib/bootstrap-3.1.1-dist/css/bootstrap-theme.min.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!--
+group,color,r,g,b
+light,grey,rgb(140,140,140)
+light,blue,rgb(136,189,230)
+light,orange,rgb(251,178,88)
+light,green,rgb(144,205,151)
+light,pink,rgb(246,170,201)
+light,brown,rgb(191,165,84)
+light,purple,rgb(188,153,199)
+light,yellow,rgb(237,221,70)
+light,red,rgb(240,126,110)
+medium,grey,rgb(77,77,77)
+medium,blue,rgb(93,165,218)
+medium,orange,rgb(250,154,58)
+medium,green,rgb(96,189,104)
+medium,pink,rgb(241,124,176)
+medium,brown,rgb(178,145,47)
+medium,purple,rgb(178,118,178)
+medium,yellow,rgb(222,207,63)
+medium,red,rgb(241,88,84)
+dark,grey,rgb(0,0,0)
+dark,blue,rgb(38,93,171)
+dark,orange,rgb(223,92,36)
+dark,green,rgb(5,151,72)
+dark,pink,rgb(229,18,111)
+dark,brown,rgb(157,114,42)
+dark,purple,rgb(123,58,150)
+dark,yellow,rgb(199,180,46)
+dark,red,rgb(203,32,39)
+    -->
+    <style>
+      path.edge {
+        opacity: 0.6;
+        fill: none;
+        stroke: rgb(229,18,111);
+        stroke-width: 4px;
+      }
+      rect.bbox {
+        fill: rgb(246,170,201);
+        fill-opacity: 0.5;
+        stroke: none;
+        /* stroke-width: 4px; */
+      }
+      .node_group .node {
+        fill: rgb(136,189,230);
+        stroke: none;
+        stroke-width: 0px;
+      }
+      .node_group text.node_label {
+        fill: rgb(38,93,171);
+      }
+      .node_group.block text.node_label {
+        fill: rgb(223,92,36);
+      }
+      .node_group.net text.node_label {
+        fill: rgb(5,151,72);
+      }
+      .node_group.group text.node_label {
+        fill: rgb(147,114,42);
+      }
+      .node_group.reduction text.node_label {
+        fill: rgb(123,58,150);
+        /* 188,153,199 */
+      }
+      .node_group .node.hover {
+        stroke: rgb(38,93,171);
+        stroke-width: 4px;
+      }
+
+      .node_group.selected .node {
+        fill: rgb(38,93,171);
+      }
+      .node_group.selected text.node_label {
+        fill: rgb(136,189,230);
+      }
+      .node_group.selected .node.hover {
+        stroke: rgb(136,189,230);
+      }
+
+      .node_group.block .node {
+        fill: rgb(251,178,88);
+        stroke: rgb(223,92,36);
+      }
+      .node_group.block.selected .node {
+        fill: rgb(223,92,36);
+      }
+      .node_group.block.selected text.node_label {
+        fill: rgb(251,178,88);
+      }
+      .node_group.block.selected .node.hover {
+        stroke: rgb(251,178,88);
+      }
+
+      .node_group.net .node {
+        fill: rgb(144,205,151);
+        stroke: rgb(5,151,72);
+      }
+      .node_group.net.selected .node {
+        fill: rgb(5,151,72);
+      }
+      .node_group.net.selected text.node_label {
+        fill: rgb(144,205,151);
+      }
+      .node_group.net.selected .node.hover {
+        stroke: rgb(144,205,151);
+      }
+
+      .node_group.reduction .node {
+        fill: rgb(188,153,199);
+        stroke: rgb(123,58,150);
+      }
+      .node_group.reduction.selected .node {
+        fill: rgb(123,58,150);
+      }
+      .node_group.reduction.selected text.node_label {
+        fill: rgb(188,153,199);
+      }
+      .node_group.reduction.selected .node.hover {
+        stroke: rgb(188,153,199);
+      }
+
+      .node_group.group .node {
+        fill: rgb(191,165,84);
+        stroke: rgb(147,114,42);
+      }
+      .node_group.group.selected .node {
+        fill: rgb(147,114,42);
+      }
+      .node_group.group.selected text.node_label {
+        fill: rgb(191,165,84);
+      }
+      .node_group.group.selected .node.hover {
+        stroke: rgb(191,165,84);
+      }
+
+      .node_group.assessed .node {
+        fill: rgb(240,126,110);
+      }
+      .node_group.assessed text.node_label {
+        fill: rgb(203,32,39);
+      }
+
+      .node_group.assessed.accepted .node {
+        fill: rgb(144,205,151);
+      }
+      .node_group.assessed.accepted text.node_label {
+        fill: rgb(5,151,72);
+      }
+
+      text.node_label {
+        font-size: 10px;
+        font-weight: bold;
+        pointer-events: none;
+      }
+      .grid {
+        width: 600px;
+        height: 600px;
+        /*
+        display: block;
+        float: left;
+        */
+      }
+      .vector-grid {
+        width: 300px;
+        height: 50px;
+      }
+
+      .placement-grid text.node_label {
+        font-size: 25px;
+      }
+
+      .vector-grid text.node_label {
+        font-size: 25px;
+      }
+
+      .matrix-G-grid text.node_label, .matrix-S-grid text.node_label {
+        font-size: 20px;
+      }
+
+      .grid-table tr, .grid-table td {
+        padding: 5px;
+      }
+      .grid-table th {
+        text-align: center;
+      }
+      table td.value {
+        text-align: center;
+      }
+    </style>
+  <body>
+    <div class="container">
+      <div class="jumbotron" style="width: 800px; height: 600px">
+        <center>
+          <table style="width: 400px;">
+            <tr>
+              <th>Dimension:</th>
+              <td>
+                <div class="slider dimension" style="width: 200px"></div>
+              </td>
+              <td class="value dimension" style="text-align: left">&nbsp;</td>
+            </tr>
+          </table>
+          <table style="width: 400px;">
+            <tr>
+              <th>Max distance:</th>
+              <td>
+                <div class="slider max-magnitude" style="width: 200px"></div>
+              </td>
+              <td class="value max-magnitude" style="text-align: left">&nbsp;</td>
+            </tr>
+          </table>
+          <table style="width: 400px;">
+            <tr>
+              <th>Edge width:</th>
+              <td>
+                <div class="slider edge-width" style="width: 200px"></div>
+              </td>
+            </tr>
+          </table>
+          <table style="width: 400px;">
+            <tr>
+              <th>$$d_x$$</th>
+              <th>$$s_x$$</th>
+              <th>$$d_y$$</th>
+              <th>$$s_y$$</th>
+            </tr>
+            <tr>
+              <td class="value d-x"></td>
+              <td class="value s-x"></td>
+              <td class="value d-y"></td>
+              <td class="value s-y"></td>
+            </tr>
+          </table>
+          <div class="btn-group">
+            <button class="btn btn-lg propose-moves"
+                    title="Propose random moves">
+              <span class="glyphicon glyphicon-random"></span>
+            </button>
+            <button class="btn btn-lg apply-moves"
+                    title="Apply proposed moves">
+              <span class="glyphicon glyphicon-fullscreen"></span>
+            </button>
+          </div>
+          <table>
+            <tr>
+              <td>
+                <div class="grid placement-grid">
+                  <svg></svg>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </center>
+      </div> <!-- /jumbotron -->
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script data-main="ampp" src="lib/require.js"></script>
+    <script src="lib/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+      src="lib/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+  </body>
+</html>
