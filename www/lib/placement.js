@@ -43,8 +43,7 @@ define(function (require) {
                            : max_magnitude);
       max_magnitude.row = Math.min(_max_magnitude, max_magnitude.row);
       max_magnitude.column = Math.min(_max_magnitude, max_magnitude.column);
-      self.$grid.$grid.$svg.selectAll('.node_group').classed('selected',
-                                                             false);
+      self.$grid.$grid.clear();
       var extent_2d = {row: self.$s2p.$row_extent,
                        column: self.$s2p.$row_extent};
       return self.$permutation.random_displacements(max_magnitude, self.$s2p);
